@@ -1,0 +1,22 @@
+{
+  "name": "employee_database0927",
+  "version": "1.0.0",
+  "description": "App to track employees",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ariesscode"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "inquirer",
+    "mysql2"
+  ],
+  "author": "Abigail Burtley",
+  "license": "ISC"
+}
