@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const app = express();
+const queries = require('./db/queries.sql')
 
 const PORT = process.env.PORT || 4009;
 
@@ -30,7 +31,7 @@ inquirer.prompt([
         'Add role', 
         'View all departments', 
         'Add department',
-        'exit'
+        'Exit'
     ],
     validate: (choices) => {
         if(choices === "") {
@@ -42,7 +43,30 @@ inquirer.prompt([
 ]).then((data) => {
     switch(data.verb) {
         case 'View all employees' :
-            console.log("Did i write this correctly?")
+           allEmployees();
+           break;
+        case 'Add employee role' :
+            addEmployee();
+            break;
+        case 'Update employee role' :
+            updateEmployeeRole();
+            break;
+        case 'View all roles' :
+            viewAllRoles();
+            break;
+        case 'Add role' :
+            addRole();
+            break;
+        case 'View all departments' :
+            allDepartments();
+            break;
+        case 'Add department' :
+            addDepartment();
+            break;
+        case 'Exit' :
+            db.end();
+            break;
+            
     }
 
 });
@@ -51,3 +75,5 @@ inquirer.prompt([
 app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 });
+
+module.exports = { db }
