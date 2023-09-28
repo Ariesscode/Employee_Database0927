@@ -84,4 +84,4 @@ app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 });
 
-module.exports = { db }
+module.exports = {db} 

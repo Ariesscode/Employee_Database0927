@@ -1,4 +1,22 @@
+const { default: inquirer } = require('inquirer');
+const connection = require('../server');
+
 function allEmployees() {
+    connection.query('SELECT * FROM role', (err,results) => {
+       err? console.log(err) : console.error(results);
+
+       inquirer
+       .prompt([
+        {
+            type: 'confirm',
+            name: 'showManagers',
+            message: 'Would you like to see the managers added to the table?',
+            default: false,
+        },
+       ]).
+
+    });
+    
 
 }
 
@@ -31,4 +49,6 @@ function exit() {
 
 }
 
-module.exports = 
+module.exports = {
+    allEmployees,
+}
