@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const app = express();
-const queries = require('./db/queries.sql')
+const queries = require('./db/queries')
 
 const PORT = process.env.PORT || 4009;
 
@@ -64,7 +64,7 @@ inquirer.prompt([
             addDepartment();
             break;
         case 'Exit' :
-            db.end();
+            exit();
             break;
             
     }
