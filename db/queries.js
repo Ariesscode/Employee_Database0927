@@ -5,13 +5,13 @@ function allEmployees() {
     app.get('/employees', (req, res) => {
     connection.query('SELECT * FROM role', (err,results) => {
        err? console.log(err) : console.table(results);
-
+const questions =
        inquirer
        .prompt([
         {
             type: 'confirm',
             name: 'showManagers',
-            message: 'Would you like to see the managers added to the table? Enter Yes or No.',
+            message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
             default: false,
         },
        ])
@@ -20,6 +20,7 @@ function allEmployees() {
             displayManagers();
         } else {
             console.log('okay, not showing managers..');
+            questions();
         }
     
        })
