@@ -44,27 +44,35 @@ inquirer.prompt([
     switch(data.verb) {
         case 'View all employees' :
            allEmployees();
+           console.log("You chose to view all employees.");
            break;
         case 'Add employee role' :
             addEmployee();
+            console.log("You added an employee.");
             break;
         case 'Update employee role' :
             updateEmployeeRole();
+            console.log("You chose to update an employees role.");
             break;
         case 'View all roles' :
             viewAllRoles();
+            console.log("You are viewing all roles.");
             break;
         case 'Add role' :
             addRole();
+            console.log("You chose to add a role.");
             break;
         case 'View all departments' :
             allDepartments();
+            console.log("You chose to view all departments.");
             break;
         case 'Add department' :
             addDepartment();
+            console.log("You would like to add a department.");
             break;
         case 'Exit' :
             exit();
+            console.log("Closing employee_database, Goodbye!");
             break;
             
     }

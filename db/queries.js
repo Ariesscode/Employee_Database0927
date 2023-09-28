@@ -28,5 +28,7 @@ function addDepartment() {
 }
 
 function exit() {
-    
+
 }
+
+module.exports = 
