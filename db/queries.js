@@ -3,22 +3,32 @@ const connection = require('../server');
 
 function allEmployees() {
     connection.query('SELECT * FROM role', (err,results) => {
-       err? console.log(err) : console.error(results);
+       err? console.log(err) : console.table(results);
 
        inquirer
        .prompt([
         {
             type: 'confirm',
             name: 'showManagers',
-            message: 'Would you like to see the managers added to the table?',
+            message: 'Would you like to see the managers added to the table? Enter Yes or No.',
             default: false,
         },
-       ]).
-
-    });
+       ])
+       .then((answer) => {
+        if (answer.showManagers) {
+            displayManagers();
+        } else {
+            console.log('okay, not showing managers..');
+        }
     
-
+       })
+    
 }
+)}
+   
+
+
+
 
 
 function addEmployee() {
