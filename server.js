@@ -22,14 +22,30 @@ inquirer.prompt([
 {   type: 'list',
     name: 'verb',
     message: 'What would you like to do?',
-    choices: ['view all employees', 'add employee role', 'update employee role', 'view all roles', 'add role', 'view all departments', 'add department'],
+    choices: [
+        'View all employees', 
+        'Add employee role',
+        'Update employee role', 
+        'View all roles', 
+        'Add role', 
+        'View all departments', 
+        'Add department',
+        'exit'
+    ],
     validate: (choices) => {
         if(choices === "") {
             return 'Choose one of the options to proceed with database.'
         }
+        return true;
     }
 }
-])
+]).then((data) => {
+    switch(data.verb) {
+        case 'View all employees' :
+            console.log("Did i write this correctly?")
+    }
+
+});
 
 
 app.listen(PORT, () => {
