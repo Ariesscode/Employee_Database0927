@@ -18,7 +18,7 @@ const db = mysql.createConnection(
     },
     console.log('You are connected to the employee-db database.')
 )
-
+function startApp() {
 inquirer.prompt([
 {   type: 'list',
     name: 'verb',
@@ -78,10 +78,11 @@ inquirer.prompt([
     }
 
 });
-
+};
 
 app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 });
 
-module.exports = {db} 
+startApp();
+module.exports = {db, questions} 
