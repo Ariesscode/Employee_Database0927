@@ -121,11 +121,39 @@ function displayManagers() {
         console.error('Error:', err);
       } else {
         console.table(results);
+        startApp();
       }
     }
   );
 }
 
+function viewAllRoles() {
+    connection.query(
+        'SELECT * FROM role', (err, results) => {
+          if (err) {
+            console.error('Error:', err);
+          } else {
+            console.table(results);
+            startApp();
+          }
+        }
+      );
+
+}
+
+function allDepartments() {
+    connection.query(
+        'SELECT * FROM departments', (err, results) => {
+          if (err) {
+            console.error('Error:', err);
+          } else {
+            console.table(results);
+            startApp();
+          }
+        }
+      );
+
+}
 
 
 startApp();
