@@ -5,7 +5,7 @@ function allEmployees() {
     connection.query('SELECT * FROM role', (err,results) => {
        err? console.log(err) : console.table(results);
 
-       inquirer
+      return inquirer
        .prompt([
         {
             type: 'confirm',
@@ -19,6 +19,7 @@ function allEmployees() {
             displayManagers();
         } else {
             console.log('okay, not showing managers..');
+            return Promise.resolve(); 
             startApp();
         }
     
