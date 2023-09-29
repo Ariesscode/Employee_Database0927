@@ -2,8 +2,6 @@ const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const app = express();
-const queries = require('./db/queries');
-//const queries = require('./db/queries')
 
 const PORT = process.env.PORT || 4009;
 
@@ -24,7 +22,7 @@ const db = mysql.createConnection(
 
     console.log('You are connected to the employee-db database.')
 )
-function startApp(startAppCallback) {
+function startApp() {
 inquirer.prompt([
 {   type: 'list',
     name: 'verb',
@@ -87,7 +85,52 @@ inquirer.prompt([
 });
 };
 
+function allEmployees(startAppCallback) {
+    connection.query('SELECT * FROM role', (err,results) => {
+       err ? console.log(err) : console.table(results);
+
+      return inquirer
+       .prompt([
+        {
+            type: 'confirm',
+            name: 'showManagers',
+            message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
+            default: false,
+        },
+       ])
+       .then((answer) => {
+        if (answer.showManagers) {
+            displayManagers();
+        } else {
+            console.log('okay, not showing managers..');
+            return Promise.resolve(); 
+            
+        }
+    
+       })
+       .then(() => {
+        startAppCallback();
+       })
+       .catch((err) => {
+        console.error('Error:', err);
+       })
+    });
+}
+
+
+   
+
+function displayManagers() {
+    return connection.query('SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id')
+      .then((results) => {
+        console.table(results);
+      })
+      .catch((err) => {
+        console.error('Error:', err)
+      })
+
+};
+
 
 
 startApp();
-module.exports = {db} 
