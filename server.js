@@ -16,6 +16,7 @@ const db = mysql.createConnection(
         password: 'docker',
         database: 'employee_db'
     },
+    
     console.log('You are connected to the employee-db database.')
 )
 function startApp() {
