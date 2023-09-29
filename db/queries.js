@@ -1,5 +1,7 @@
 const inquirer = require('inquirer');
+
 const connection = require('../server');
+
 
 function allEmployees() {
     connection.query('SELECT * FROM role', (err,results) => {
@@ -25,7 +27,7 @@ function allEmployees() {
     
        })
        .then(() => {
-        startApp();
+        startAppCallback();
        })
        .catch((err) => {
         console.error('Error:', err);

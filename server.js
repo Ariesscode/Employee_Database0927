@@ -2,24 +2,29 @@ const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const app = express();
-const queries = require('./db/queries')
+const queries = require('./db/queries');
+//const queries = require('./db/queries')
 
 const PORT = process.env.PORT || 4009;
 
 app.use(express.urlencoded( {extended: false}));
 app.use(express.json());
 
+app.listen(PORT, () => {
+    console.log(`Server on port ${PORT}`)
+});
+
 const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
         password: 'docker',
-        database: 'employee_db'
+        database: 'employees_db'
     },
-    
+
     console.log('You are connected to the employee-db database.')
 )
-function startApp() {
+function startApp(startAppCallback) {
 inquirer.prompt([
 {   type: 'list',
     name: 'verb',
@@ -41,10 +46,11 @@ inquirer.prompt([
         return true;
     }
 }
-]).then((data) => {
+])
+.then((data) => {
     switch(data.verb) {
         case 'View all employees' :
-           allEmployees();
+           allEmployees(startApp);
            console.log("You chose to view all employees.");
            break;
         case 'Add employee role' :
@@ -81,9 +87,7 @@ inquirer.prompt([
 });
 };
 
-app.listen(PORT, () => {
-    console.log(`Server on port ${PORT}`)
-});
+
 
 startApp();
-module.exports = {db, questions} 
+module.exports = {db} 
