@@ -129,7 +129,7 @@ function displayManagers() {
 
 function viewAllRoles() {
     connection.query(
-        'SELECT * FROM role', (err, results) => {
+        'SELECT r.id, r.title, r.salary, d.department FROM role r JOIN department d ON r.department_id = d.id', (err, results) => {
           if (err) {
             console.error('Error:', err);
           } else {
