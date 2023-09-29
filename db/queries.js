@@ -20,9 +20,15 @@ function allEmployees() {
         } else {
             console.log('okay, not showing managers..');
             return Promise.resolve(); 
-            startApp();
+            
         }
     
+       })
+       .then(() => {
+        startApp();
+       })
+       .catch((err) => {
+        console.error('Error:', err);
        })
     });
 }
@@ -31,14 +37,14 @@ function allEmployees() {
    
 
 function displayManagers() {
-    connection.query('SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id', (err, results) => {
-        if (err) {
-           console.log(err)
-        
-        } else {
+    return connection.query('SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id')
+      .then((results) => {
         console.table(results);
-    }
-});
+      })
+      .catch((err) => {
+        console.error('Error:', err)
+      })
+
 };
 
 
