@@ -12,7 +12,7 @@ app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 });
 
-const db = mysql.createConnection(
+const connection = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
@@ -85,51 +85,46 @@ inquirer.prompt([
 });
 };
 
-function allEmployees(startAppCallback) {
-    connection.query('SELECT * FROM role', (err,results) => {
-       err ? console.log(err) : console.table(results);
-
-      return inquirer
-       .prompt([
-        {
-            type: 'confirm',
-            name: 'showManagers',
-            message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
-            default: false,
-        },
-       ])
-       .then((answer) => {
-        if (answer.showManagers) {
-            displayManagers();
-        } else {
-            console.log('okay, not showing managers..');
-            return Promise.resolve(); 
-            
-        }
-    
-       })
-       .then(() => {
-        startAppCallback();
-       })
-       .catch((err) => {
+function allEmployees() {
+    connection.query('SELECT * FROM employee', (err, results) => {
+      if (err) {
         console.error('Error:', err);
-       })
-    });
+      } else {
+        console.table(results);
+  
+        inquirer
+          .prompt([
+            {
+              type: 'confirm',
+              name: 'showManagers',
+              message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
+              default: false,
+            },
+          ])
+          .then(function (answer) {
+            if (answer.showManagers) {
+                displayManagers();
+          } else {
+            console.log('Okay, not showing managers...');
+            startApp();
+          }
+        });
+    }
+  });
 }
 
-
-   
-
 function displayManagers() {
-    return connection.query('SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id')
-      .then((results) => {
+  connection.query(
+    'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
+    (err, results) => {
+      if (err) {
+        console.error('Error:', err);
+      } else {
         console.table(results);
-      })
-      .catch((err) => {
-        console.error('Error:', err)
-      })
-
-};
+      }
+    }
+  );
+}
 
 
 
