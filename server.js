@@ -133,7 +133,13 @@ function viewAllRoles() {
           if (err) {
             console.error('Error:', err);
           } else {
-            console.table(results);
+            const formatResults = results.map((row) => ({
+                Title: row.title,
+                Salary: row.salary,
+                Department: row.department,
+            }));
+            
+            console.table(formatResults);
             startApp();
           }
         }
