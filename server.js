@@ -133,13 +133,7 @@ function viewAllRoles() {
           if (err) {
             console.error('Error:', err);
           } else {
-            const formatResults = results.map((row) => ({
-                Title: row.title,
-                Salary: row.salary,
-                Department: row.department,
-            }));
-            
-            console.table(formatResults);
+            console.table(results);
             startApp();
           }
         }
@@ -149,7 +143,7 @@ function viewAllRoles() {
 
 function allDepartments() {
     connection.query(
-        'SELECT department FROM department;', (err, results) => {
+        'SELECT * FROM department', (err, results) => {
           if (err) {
             console.error('Error:', err);
           } else {
@@ -161,5 +155,71 @@ function allDepartments() {
 
 }
 
+
+function addEmployee() {
+  inquirer.prompt([
+        {   type: 'input',
+            name: 'first_name',
+            message: 'what is the first name of the employee?',
+            validate: (input) => {
+                if (input === "") {
+                    return 'A first name is required to enter a new employee.'
+                }
+                return true;
+            }
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the last name of the employee?',
+            validate: (input) => {
+                if (input === "") {
+                    return 'Enter the last name of employee.'
+                }
+                return true;
+            }
+
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: 'What is their role id?',
+            validate: (input ) => {
+                if (input === "") {
+                    return 'NULL'
+                }
+                return true;
+            }
+        },
+        {
+            type: 'confirm',
+            name: 'manager_id',
+            message: 'Does this employee have a manager?',
+            default: false},
+        ])
+        .then(function (answer) {
+          if (answer.manager_id) {
+             inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'managers_id',
+                    message: 'What is the manager id?',
+                    validate: (input) => {
+                        if (input === "") {
+                            return 'Enter the manager id number.'
+                        }
+                        return true;
+                    }
+                }
+             ])
+        } else {
+          console.log('Okay, not showing managers...');
+          startApp();
+        }
+      });
+
+        }
+
+    ]);
 
 startApp();
