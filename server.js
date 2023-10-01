@@ -143,7 +143,7 @@ function viewAllRoles() {
 
 function allDepartments() {
     connection.query(
-        'SELECT * FROM department', (err, results) => {
+        'SELECT department FROM department;', (err, results) => {
           if (err) {
             console.error('Error:', err);
           } else {
