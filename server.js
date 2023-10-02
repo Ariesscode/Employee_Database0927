@@ -155,9 +155,8 @@ function allDepartments() {
 
 }
 
-
 function addEmployee() {
-  inquirer.prompt([
+    inquirer.prompt([
         {   type: 'input',
             name: 'first_name',
             message: 'what is the first name of the employee?',
@@ -186,40 +185,17 @@ function addEmployee() {
             message: 'What is their role id?',
             validate: (input ) => {
                 if (input === "") {
-                    return 'NULL'
+                    return 'Role id is required'
                 }
                 return true;
             }
         },
-        {
-            type: 'confirm',
-            name: 'manager_id',
-            message: 'Does this employee have a manager?',
-            default: false},
-        ])
-        .then(function (answer) {
-          if (answer.manager_id) {
-             inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'managers_id',
-                    message: 'What is the manager id?',
-                    validate: (input) => {
-                        if (input === "") {
-                            return 'Enter the manager id number.'
-                        }
-                        return true;
-                    }
-                }
-             ])
-        } else {
-          console.log('Okay, not showing managers...');
-          startApp();
-        }
-      });
+    ]).then((answers) => {
+        'UPDATE employee SET role_id = ? WHERE employee_name = ?',
+    })
+}
 
-        }
 
-    ]);
+
 
 startApp();
