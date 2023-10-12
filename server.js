@@ -25,30 +25,10 @@ const connection = mysql.createConnection(
     
 )
 
-function allEmployees() {  //use alias for each tbale im pulling from e for employee, r for role, d for department 
-                            ////manager names will have first and last name in single column
-  connection.query(`SELECT 
-    e.id AS id,
-    e.first_name,
-    e.last_name,
-    r.title AS title,
-    d.department AS department,
-    r.salary,
-    CONCAT(m.first_name, ' ', m.last_name) AS manager  
-    FROM employee AS e
-      JOIN role AS r ON e.role_id = r.id
-      JOIN department AS d ON r.department_id = d.id
-      LEFT JOIN employee AS m ON e.manager_id = m.id`, (err, results) => {
-      if (err) {
-          console.error('Error:', err);
-      } else {
-          console.table(results);
-          toPromptManagerShow(); // Prompt user for displaying managers
-      }
-  });
-}
+
 function startApp() {
-inquirer.prompt([
+inquirer.prompt
+([
 {   type: 'list',
     name: 'verb',
     message: 'What would you like to do?',
@@ -102,14 +82,49 @@ inquirer.prompt([
             break;
         case 'Exit' :
             exit();
-            connection.end();
-           
+            break;
+
+
+           default:
             break;
             
     }
 
 });
 };
+
+
+
+function allEmployees() {  //use alias for each tbale im pulling from e for employee, r for role, d for department 
+  ////manager names will have first and last name in single column
+connection.query(`SELECT 
+e.id AS id,
+e.first_name,
+e.last_name,
+r.title AS title,
+d.department AS department,
+r.salary,
+CONCAT(m.first_name, ' ', m.last_name) AS manager  
+FROM employee AS e
+JOIN role AS r ON e.role_id = r.id
+JOIN department AS d ON r.department_id = d.id
+LEFT JOIN employee AS m ON e.manager_id = m.id`, (err, results) => {
+if (err) {
+console.error('Error:', err);
+} else {
+console.table(results);
+toPromptManagerShow(); // Prompt user for displaying managers
+}
+});
+}
+
+
+
+function exit() {
+  connection.end();
+            console.log('Goodbye!')
+
+}
 
 function toPromptManagerShow() {
   let showManagers = true;
@@ -125,12 +140,14 @@ function toPromptManagerShow() {
           .then(function (answer) {
             if (answer.showManagers) {
                 displayManagers();
+                startApp();
           } else {
             console.log('Okay, not showing managers...');
             showManagers = false;
           }
+          
         })
-        startApp();
+        
     }
   
   
@@ -309,10 +326,11 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
      console.log('Employee added successfully!')
       console.table(results)
       allEmployees();
+      startApp();
 
     }
   
-    startApp();
+   
   })
 })
 }
@@ -375,8 +393,9 @@ function updateEmployeeRole() {
           console.error('Error:', err);  
         } else {
           console.table(results);
+          startApp();
         }
-        startApp();
+        
       });
     });
   });
@@ -468,8 +487,9 @@ function addRole() {
             } else {
               console.log('Role added successfully!');
               console.table(results);
+              startApp();
             }
-            startApp();
+        
           }
           );
         }
@@ -520,8 +540,9 @@ function addDepartment() {
             } else {
               console.log('Department added successfully!');
               console.table(insertResults);
+              startApp();
             }
-            startApp();
+            
           }
           );
         }
