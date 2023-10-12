@@ -390,8 +390,8 @@ function addRole() {
           break;
   }
 
-    connection.query('SELECT * FROM role',
-    [answers.add_role, answers.role_salary, answers.role_department, answers.department_id],
+    connection.query('SELECT * FROM role WHERE title = ?', [answers.add_role], (selectErr, selectResults),
+  
      (selectErr, selectResults) => {
       if (selectErr) {
         console.error('Error:', selectErr);
@@ -399,16 +399,14 @@ function addRole() {
         return;
       }
     
-      const roleExists = selectResults.some(
-        (roles) => roles.role === answers.add_role
-      );
-      if (roleExists) {
+      if (selectResults.length > 0) {
         console.log('Role already exists.');
         startApp();
       } else {
+      
         connection.query(
-          'INSERT INTO role(title, salary, department_id) VALUES(?, ?, ?)',
-          [answers.add_role],
+          'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)',
+          [answers.add_role, answers.role_salary, department_id],
           (insertErr, insertResults) => {
             if (insertErr) {
               console.error('Error:', insertErr);
@@ -446,7 +444,8 @@ function addDepartment() {
       connection.query('SELECT * FROM department', (selectErr, selectResults) => {
         if (selectErr) {
           console.error('Error:', selectErr);
-          
+          startApp();
+          return;
          
         }
   
