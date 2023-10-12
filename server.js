@@ -21,7 +21,19 @@ const connection = mysql.createConnection(
     },
 
     console.log('You are connected to the employee-db database.')
+
+    
 )
+
+connection.connect((err) => {
+  if (err) {
+      console.error('Error connecting to the database:', err);
+      return;
+  }
+  console.log('Connected to the employee-db database.');
+  allEmployees(); // Call the function to display employee data
+});
+
 function startApp() {
 inquirer.prompt([
 {   type: 'list',
@@ -86,12 +98,9 @@ inquirer.prompt([
 };
 
 function allEmployees() {
-    connection.query('SELECT * FROM employee', (err, results) => {
-      if (err) {
-        console.error('Error:', err);
-      } else {
-        console.table(results);
-  
+  let showManagers = true;
+    
+        while (showManagers) {
         inquirer
           .prompt([
             {
@@ -106,13 +115,13 @@ function allEmployees() {
                 displayManagers();
           } else {
             console.log('Okay, not showing managers...');
-            startApp();
+            showManagers = false;
           }
         });
     }
-  });
-}
-
+  
+  }
+    
 function displayManagers() {
   connection.query(
     'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
@@ -288,7 +297,6 @@ function addEmployee() {
       console.table(results)
       allEmployees();
 
-     
     }
   
     startApp();
