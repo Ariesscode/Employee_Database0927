@@ -25,15 +25,16 @@ const connection = mysql.createConnection(
     
 )
 
-connection.connect((err) => {
-  if (err) {
-      console.error('Error connecting to the database:', err);
-      return;
-  }
-  console.log('Connected to the employee-db database.');
-  allEmployees(); // Call the function to display employee data
-});
-
+function allEmployees() {
+  connection.query('SELECT * FROM employee', (err, results) => {
+      if (err) {
+          console.error('Error:', err);
+      } else {
+          console.table(results);
+          toPromptManagerShow(); // Prompt user for displaying managers
+      }
+  });
+}
 function startApp() {
 inquirer.prompt([
 {   type: 'list',
@@ -97,10 +98,8 @@ inquirer.prompt([
 });
 };
 
-function allEmployees() {
+function toPromptManagerShow() {
   let showManagers = true;
-    
-        while (showManagers) {
         inquirer
           .prompt([
             {
@@ -117,10 +116,11 @@ function allEmployees() {
             console.log('Okay, not showing managers...');
             showManagers = false;
           }
-        });
+        })
+        startApp();
     }
   
-  }
+  
     
 function displayManagers() {
   connection.query(
