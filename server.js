@@ -180,20 +180,46 @@ function addEmployee() {
 
         },
         {
-            type: 'input',
-            name: 'role_id',
-            message: 'What is their role id?',
-            validate: (input ) => {
-                if (input === "") {
-                    return 'Role id is required'
-                }
-                return true;
+          type: 'list',
+          name: 'role',
+          message: 'What is their role?',
+          choices: [
+            'HR manager', 
+            'Accountant',
+            'Software Engineer', 
+            'Janitor', 
+            'Add role', 
+            'Real Estate Agent', 
+            'Exit'
+        ],
+        validate: (choices) => {
+            if(choices === "") {
+                return 'Choose one of the options to add an employee.'
             }
-        },
-    ]).then((answers) => {
-        'UPDATE employee SET role_id = ? WHERE employee_name = ?',
-    })
-}
+            return true;
+        }
+    },
+    {
+      type: 'list',
+      name: 'employee_manager',
+      message: 'Who is the employees manager?',
+      choices: [
+        'John Linen', 
+        'Abby Smith',
+        'Bryan Sanchez', 
+        'Bob Brown', 
+        'Maxie Luiz', 
+        'Chris Jr', 
+        'Exit'
+    ],
+    validate: (choices) => {
+        if(choices === "") {
+            return 'Choose one of the options to add an employee.'
+        }
+        return true;
+    }
+    },
+        
 
 
 
