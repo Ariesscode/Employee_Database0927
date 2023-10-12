@@ -29,7 +29,7 @@ inquirer.prompt([
     message: 'What would you like to do?',
     choices: [
         'View all employees', 
-        'Add employee role',
+        'Add employee',
         'Update employee role', 
         'View all roles', 
         'Add role', 
@@ -49,35 +49,35 @@ inquirer.prompt([
     switch(data.verb) {
         case 'View all employees' :
            allEmployees(startApp);
-           console.log("You chose to view all employees.");
+           
            break;
-        case 'Add employee role' :
+        case 'Add employee' :
             addEmployee();
-            console.log("You added an employee.");
+            
             break;
         case 'Update employee role' :
             updateEmployeeRole();
-            console.log("You chose to update an employees role.");
+           
             break;
         case 'View all roles' :
             viewAllRoles();
-            console.log("You are viewing all roles.");
+            
             break;
         case 'Add role' :
             addRole();
-            console.log("You chose to add a role.");
+            
             break;
         case 'View all departments' :
             allDepartments();
-            console.log("You chose to view all departments.");
+          
             break;
         case 'Add department' :
             addDepartment();
-            console.log("You would like to add a department.");
+            
             break;
         case 'Exit' :
             exit();
-            console.log("Closing employee_database, Goodbye!");
+           
             break;
             
     }
@@ -189,7 +189,6 @@ function addEmployee() {
             'Accountant',
             'Software Engineer', 
             'Janitor', 
-            'Add role', 
             'Real Estate Agent', 
             'Exit'
         ],
@@ -225,32 +224,60 @@ function addEmployee() {
   . then((answers) => {
    
       let role_id = null;
+      let manager_id = null;
 
       switch (answers.role) {
-          case 'HR manager':
-              role_id = 1; 
+          case 'None':
+              role_id = Null; 
               break;
-              case 'HR manager':
+              case 'Accountant':
               role_id = 2; 
               break;
-              case 'HR manager':
+              case 'Software Engineer':
               role_id = 3; 
               break;
-              case 'HR manager':
+              case 'Janitor':
               role_id = 4; 
               break;
-              case 'HR manager':
+              case 'Real Estate Agent':
               role_id = 5; 
               break;
-              case 'HR manager':
-              role_id = 6; 
+              
+            default:
               break;
-          
 
-          default:
-              break;
+
+              switch (answers.employee_manager) {
+                case 'John Linen':
+                    manager_id = 1; // Set the correct manager ID based on your data
+                    break;
+                    case 'Abby Smith':
+                      manager_id = 2; // Set the correct manager ID based on your data
+                      break;
+                      case 'Bryan Sanchez':
+                        manager_id = 3; // Set the correct manager ID based on your data
+                        break;
+                        case 'Bob Brown':
+                          manager_id = 4; // Set the correct manager ID based on your data
+                          break;
+                          case 'Maxie Luiz':
+                            manager_id = 5; // Set the correct manager ID based on your data
+                            break;
+
+                            case 'Chris Jr':
+                              manager_id = 6; // Set the correct manager ID based on your data
+                              break;
+                // Add cases for other managers
+    
+                default:
+                    break;
+            }
       }
-    connection.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
+              if (answers.employee_manager !== 'None') {
+                
+                manager_id = answers.employee_manager;
+      }
+    connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
      (err,results) => {
       if (err) {
         console.error('Error:', err);
@@ -258,6 +285,8 @@ function addEmployee() {
    
      console.log('Employee added successfully!')
       console.table(results)
+      allEmployees();
+
      
     }
   
