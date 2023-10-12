@@ -309,21 +309,28 @@ function addRole() {
   inquirer.prompt
   ([
     {
-      type: 'confirm',
-      name: 'showManagers',
-      message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
-      default: false,
+      type: 'input',
+      name: 'add_role',
+      message: 'What is the name of the role you want to add?',
+      validate: (input) => {
+        if(input === "") {
+          return "role name is needed to add a role."
+        }
+        return true;
+      }
     },
   ])
-  .then(function (answer) {
-    if (answer.showManagers) {
-        displayManagers();
-  } else {
-    console.log('Okay, not showing managers...');
-    showManagers = false;
-  }
-})
-startApp();
+  connection.query(
+    'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
+    (err, results) => {
+      if (err) {
+        console.error('Error:', err);
+      } else {
+        console.table(results);
+        startApp();
+      }
+    }
+  );
 }
 
 
@@ -331,23 +338,30 @@ function addDepartment() {
   inquirer.prompt
   ([
     {
-      type: 'confirm',
-      name: 'showManagers',
-      message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
-      default: false,
+      type: 'input',
+      name: 'add_department',
+      message: 'What is the name of the department?',
+      validate: (input) => {
+        if(input === "") {
+          return "department name is needed to add a department."
+        }
+        return true;
+      }
     },
   ])
-  .then(function (answer) {
-    if (answer.showManagers) {
-        displayManagers();
-  } else {
-    console.log('Okay, not showing managers...');
-    showManagers = false;
-  }
-})
-startApp();
+  connection.query(
+    'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
+    (err, results) => {
+      if (err) {
+        console.error('Error:', err);
+      } else {
+        console.table(results);
+        startApp();
+      }
+    }
+  );
 }
 
-}
+
         
 startApp();
