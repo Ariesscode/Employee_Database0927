@@ -305,6 +305,29 @@ function addEmployee() {
 }
 
 
+
+function updateEmployeeRole() {
+
+  inquirer.prompt
+  ([
+    {
+      type: 'input',
+      name: 'update_employee',
+      message: 'Which employees role do you want to update?',
+      choices: [
+        'John Linen', 
+        'Abby Smith',
+        'Bryan Sanchez', 
+        'Bob Brown', 
+        'Maxie Luiz', 
+        'Chris Jr'
+
+      ]
+    },
+  ])
+}
+
+
 function addRole() {
   inquirer.prompt
   ([
@@ -319,6 +342,30 @@ function addRole() {
         return true;
       }
     },
+    {
+      type: 'input',
+      name: 'role_salary',
+      message: 'What is the salary for this role?',
+      validate: (input) => {
+        if(input === "") {
+          return 'Enter a salary to proceed to adding role.'
+        }
+        return true;
+      }
+    },
+    {
+      type: 'list',
+      name: 'role_department',
+      message: 'Which department does this role belong to?',
+      choices: [
+        'HR',
+        'Finance',
+        'Engineering',
+        'Custodian',
+        'Realtor'
+      ]
+
+    }
   ])
   connection.query(
     'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
@@ -347,7 +394,7 @@ function addDepartment() {
         }
         return true;
       }
-    },
+    }
   ])
   connection.query(
     'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
