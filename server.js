@@ -102,6 +102,7 @@ inquirer.prompt([
             break;
         case 'Exit' :
             exit();
+            connection.end();
            
             break;
             
@@ -118,7 +119,7 @@ function toPromptManagerShow() {
               type: 'confirm',
               name: 'showManagers',
               message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
-              default: false,
+              default: false, //this will prompt user to show managers and if not it will not show the mangers
             },
           ])
           .then(function (answer) {
