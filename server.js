@@ -397,18 +397,16 @@ function addDepartment() {
     }
   ])
   connection.query(
-    'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
-    (err, results) => {
-      if (err) {
-        console.error('Error:', err);
-      } else {
-        console.table(results);
+    connection.query('SELECT * FROM department', (selectErr, selectResults) => {
+      if (selectErr) {
+        console.error('Error:', selectErr);
         startApp();
+        return;
       }
-    }
-  );
-}
 
+      const departmentExists = selectResults.some(
+        (department) => department.department === answers.add_department
+      );
 
         
 startApp();
