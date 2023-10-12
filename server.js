@@ -25,8 +25,20 @@ const connection = mysql.createConnection(
     
 )
 
-function allEmployees() {
-  connection.query('SELECT * FROM employee', (err, results) => {
+function allEmployees() {  //use alias for each tbale im pulling from e for employee, r for role, d for department 
+                            ////manager names will have first and last name in single column
+  connection.query(`SELECT 
+    e.id AS id,
+    e.first_name,
+    e.last_name,
+    r.title AS title,
+    d.department AS department,
+    r.salary,
+    CONCAT(m.first_name, ' ', m.last_name) AS manager  
+    FROM employee AS e
+      JOIN role AS r ON e.role_id = r.id
+      JOIN department AS d ON r.department_id = d.id
+      LEFT JOIN employee AS m ON e.manager_id = m.id`, (err, results) => {
       if (err) {
           console.error('Error:', err);
       } else {
@@ -164,8 +176,8 @@ function allDepartments() {
 
 }
 
-function addEmployee() {
-    inquirer.prompt([
+function addEmployee() { //prompts question to fill in all seeds of employee table , if employee doesn't have a manager, it will show null
+    inquirer.prompt([  //id for each employee, role, department set to auto increment
         {   type: 'input',
             name: 'first_name',
             message: 'what is the first name of the employee?',
@@ -282,9 +294,9 @@ function addEmployee() {
                     break;
             }
       
-              if (answers.employee_manager === 'None') {
+              if (answers.employee_manager === 'None') { //if no manager, fiel will be null
                 
-                manager_id = answers.employee_manager;
+                manager_id = answers.employee_manager; // name of manager will use the case corresponded to it in switch function and set the manager id 
               }
       
     connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, role_id, manager_id],
@@ -336,27 +348,37 @@ function updateEmployeeRole() {
       },
     },
   ]).then((answers) => {
-    switch (answers.role_department) {
-      case 'HR':
-          department_id = 1; 
-          break;
-          case 'Finance':
-          department_id = 2; 
-          break;
-          case 'Engineering':
-          department_id = 3; 
-          break;
-          case 'Custodian':
-          department_id = 4; 
-          break;
-          case 'Realtor':
-          department_id = 5; 
-          break;
-          
-        default:
-          break;
+    const employeeName = answers.employee_name;
+    const newRole = answers.new_role;
+  
 
-  })
+    connection.query('SELECT id FROM employee WHERE first_name = ?', [employeeName], (err, results) => {
+      if (err) {
+        console.error('Error:', err);
+        startApp();
+        return;
+      }
+
+      if (results.length === 0) {
+        console.log('Employee not found.');
+        startApp();
+        return;
+      }
+  
+      const employeeId = results[0].id; //extracting the id from the results, expecting one name 
+
+      
+      connection.query('UPDATE employee SET role_id = (SELECT id FROM role WHERE title = ?) WHERE id = ?', [newRole, employeeId], 
+      (err, results) => { //update employee by id using the new role name, id which was extracted from the query of first name 
+        if (updateErr) {
+          console.error('Error:', err);  
+        } else {
+          console.table(results);
+        }
+        startApp();
+      });
+    });
+  });
 }
 
 
@@ -400,7 +422,7 @@ function addRole() {
     }
   ])
   .then((answers) => {
-    let department_id = null;
+    let department_id = null;  // switch statement used to add the dpeartment id corresponded to the role
     switch (answers.role_department) {
       case 'HR':
           department_id = 1; 
@@ -424,14 +446,14 @@ function addRole() {
 
     connection.query('SELECT * FROM role WHERE title = ?', [answers.add_role],
   
-     (selectErr, selectResults) => {
-      if (selectErr) {
-        console.error('Error:', selectErr);
+     (err, results) => {
+      if (err) {
+        console.error('Error:', err);
         startApp();
         return;
       }
     
-      if (selectResults.length > 0) {
+      if (results.length > 0) {
         console.log('Role already exists.');
         startApp();
       } else {
@@ -439,12 +461,12 @@ function addRole() {
         connection.query(
           'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)',
           [answers.add_role, answers.role_salary, department_id],
-          (insertErr, insertResults) => {
-            if (insertErr) {
-              console.error('Error:', insertErr);
+          (err, results) => {
+            if (err) {
+              console.error('Error:', err);
             } else {
               console.log('Role added successfully!');
-              console.table(insertResults);
+              console.table(results);
             }
             startApp();
           }
