@@ -390,7 +390,7 @@ function addRole() {
           break;
   }
 
-    connection.query('SELECT * FROM role WHERE title = ?', [answers.add_role], (selectErr, selectResults),
+    connection.query('SELECT * FROM role WHERE title = ?', [answers.add_role],
   
      (selectErr, selectResults) => {
       if (selectErr) {
