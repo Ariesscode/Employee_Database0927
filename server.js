@@ -303,5 +303,51 @@ function addEmployee() {
   })
 })
 }
+
+
+function addRole() {
+  inquirer.prompt
+  ([
+    {
+      type: 'confirm',
+      name: 'showManagers',
+      message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
+      default: false,
+    },
+  ])
+  .then(function (answer) {
+    if (answer.showManagers) {
+        displayManagers();
+  } else {
+    console.log('Okay, not showing managers...');
+    showManagers = false;
+  }
+})
+startApp();
+}
+
+
+function addDepartment() {
+  inquirer.prompt
+  ([
+    {
+      type: 'confirm',
+      name: 'showManagers',
+      message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
+      default: false,
+    },
+  ])
+  .then(function (answer) {
+    if (answer.showManagers) {
+        displayManagers();
+  } else {
+    console.log('Okay, not showing managers...');
+    showManagers = false;
+  }
+})
+startApp();
+}
+
+}
         
 startApp();
