@@ -367,18 +367,63 @@ function addRole() {
 
     }
   ])
-  connection.query(
-    'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
-    (err, results) => {
-      if (err) {
-        console.error('Error:', err);
-      } else {
-        console.table(results);
+  .then((answers) => {
+    let department_id = null;
+    switch (answers.role_department) {
+      case 'HR':
+          department_id = 1; 
+          break;
+          case 'Finance':
+          department_id = 2; 
+          break;
+          case 'Engineering':
+          department_id = 3; 
+          break;
+          case 'Custodian':
+          department_id = 4; 
+          break;
+          case 'Realtor':
+          department_id = 5; 
+          break;
+          
+        default:
+          break;
+  }
+
+    connection.query('SELECT * FROM role',
+    [answers.add_role, answers.role_salary, answers.role_department, answers.department_id],
+     (selectErr, selectResults) => {
+      if (selectErr) {
+        console.error('Error:', selectErr);
         startApp();
+        return;
       }
-    }
-  );
-}
+    
+      const roleExists = selectResults.some(
+        (roles) => roles.role === answers.add_role
+      );
+      if (roleExists) {
+        console.log('Role already exists.');
+        startApp();
+      } else {
+        connection.query(
+          'INSERT INTO role(title, salary, department_id) VALUES(?, ?, ?)',
+          [answers.add_role],
+          (insertErr, insertResults) => {
+            if (insertErr) {
+              console.error('Error:', insertErr);
+            } else {
+              console.log('Role added successfully!');
+              console.table(insertResults);
+            }
+            startApp();
+          }
+          );
+        }
+      });
+    });
+  }
+  
 
 
 function addDepartment() {
@@ -401,8 +446,8 @@ function addDepartment() {
       connection.query('SELECT * FROM department', (selectErr, selectResults) => {
         if (selectErr) {
           console.error('Error:', selectErr);
-          startApp();
-          return;
+          
+         
         }
   
       const departmentExists = selectResults.some(
