@@ -395,18 +395,55 @@ function addDepartment() {
         return true;
       }
     }
-  ])
-  connection.query(
-    connection.query('SELECT * FROM department', (selectErr, selectResults) => {
-      if (selectErr) {
-        console.error('Error:', selectErr);
-        startApp();
-        return;
-      }
+  
+   ]).then((answers) => {
 
+      connection.query('SELECT * FROM department', (selectErr, selectResults) => {
+        if (selectErr) {
+          console.error('Error:', selectErr);
+          startApp();
+          return;
+        }
+  
       const departmentExists = selectResults.some(
         (department) => department.department === answers.add_department
       );
+      if (departmentExists) {
+        console.log('Department already exists.');
+        startApp();
+      } else {
+        connection.query(
+          'INSERT INTO department (department) VALUES (?)',
+          [answers.add_department],
+          (insertErr, insertResults) => {
+            if (insertErr) {
+              console.error('Error:', insertErr);
+            } else {
+              console.log('Department added successfully!');
+              console.table(insertResults);
+            }
+            startApp();
+          }
+          );
+        }
+      });
+    });
+  }
+  
+  
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
 
         
 startApp();
