@@ -163,7 +163,8 @@ function addEmployee() {
             validate: (input) => {
                 if (input === "") {
                     return 'A first name is required to enter a new employee.'
-                }
+                } 
+              
                 return true;
             }
         },
@@ -204,6 +205,7 @@ function addEmployee() {
       name: 'employee_manager',
       message: 'Who is the employees manager?',
       choices: [
+        'None',
         'John Linen', 
         'Abby Smith',
         'Bryan Sanchez', 
@@ -214,12 +216,58 @@ function addEmployee() {
     ],
     validate: (choices) => {
         if(choices === "") {
-            return 'Choose one of the options to add an employee.'
+            return 'If employee does not have a manger, choose none from lsit.'
         }
         return true;
     }
-    },
+  }
+  ])
+  . then((answers) => {
+   
+      let role_id = null;
+
+      switch (answers.role) {
+          case 'HR manager':
+              role_id = 1; 
+              break;
+              case 'HR manager':
+              role_id = 2; 
+              break;
+              case 'HR manager':
+              role_id = 3; 
+              break;
+              case 'HR manager':
+              role_id = 4; 
+              break;
+              case 'HR manager':
+              role_id = 5; 
+              break;
+              case 'HR manager':
+              role_id = 6; 
+              break;
+          
+
+          default:
+              break;
+      }
+    connection.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
+     (err,results) => {
+      if (err) {
+        console.error('Error:', err);
+    } else {
+   
+     console.log('Employee added successfully!')
+      console.table(results)
+     
+    }
+  
+    startApp();
+  })
+  })
+
+}
         
+
 
 
 
