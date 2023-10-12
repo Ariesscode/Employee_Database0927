@@ -324,7 +324,39 @@ function updateEmployeeRole() {
 
       ]
     },
-  ])
+    {
+      type: 'input',
+      name: 'new_role',
+      message: 'Enter the new role for the employee:',
+      validate: (input) => {
+        if (input === '') {
+          return 'Role name is required to update the employee role.';
+        }
+        return true;
+      },
+    },
+  ]).then((answers) => {
+    switch (answers.role_department) {
+      case 'HR':
+          department_id = 1; 
+          break;
+          case 'Finance':
+          department_id = 2; 
+          break;
+          case 'Engineering':
+          department_id = 3; 
+          break;
+          case 'Custodian':
+          department_id = 4; 
+          break;
+          case 'Realtor':
+          department_id = 5; 
+          break;
+          
+        default:
+          break;
+
+  })
 }
 
 
