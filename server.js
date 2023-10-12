@@ -222,9 +222,9 @@ function addEmployee() {
   }
   ])
   . then((answers) => {
+    let role_id = null;
+    let manager_id = null;
    
-      let role_id = null;
-      let manager_id = null;
 
       switch (answers.role) {
           case 'None':
@@ -245,39 +245,40 @@ function addEmployee() {
               
             default:
               break;
-
+      }
 
               switch (answers.employee_manager) {
                 case 'John Linen':
-                    manager_id = 1; // Set the correct manager ID based on your data
+                    manager_id = 1; 
                     break;
                     case 'Abby Smith':
-                      manager_id = 2; // Set the correct manager ID based on your data
+                      manager_id = 2; 
                       break;
                       case 'Bryan Sanchez':
-                        manager_id = 3; // Set the correct manager ID based on your data
+                        manager_id = 3;
                         break;
                         case 'Bob Brown':
-                          manager_id = 4; // Set the correct manager ID based on your data
+                          manager_id = 4; 
                           break;
                           case 'Maxie Luiz':
-                            manager_id = 5; // Set the correct manager ID based on your data
+                            manager_id = 5; 
                             break;
 
                             case 'Chris Jr':
-                              manager_id = 6; // Set the correct manager ID based on your data
+                              manager_id = 6; 
                               break;
-                // Add cases for other managers
+          
     
                 default:
                     break;
             }
-      }
-              if (answers.employee_manager !== 'None') {
+      
+              if (answers.employee_manager === 'None') {
                 
                 manager_id = answers.employee_manager;
-      }
-    connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
+              }
+      
+    connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, role_id, manager_id],
      (err,results) => {
       if (err) {
         console.error('Error:', err);
@@ -292,13 +293,7 @@ function addEmployee() {
   
     startApp();
   })
-  })
-
+})
 }
         
-
-
-
-
-
 startApp();
