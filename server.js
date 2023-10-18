@@ -115,8 +115,8 @@ console.error('Error:', err);
 console.table(results);
 toPromptManagerShow(); // Prompt user for displaying managers
 }
-});
 }
+)};
 
 
 
@@ -144,6 +144,7 @@ function toPromptManagerShow() {
           } else {
             console.log('Okay, not showing managers...');
             showManagers = false;
+            startApp();
           }
           
         })
