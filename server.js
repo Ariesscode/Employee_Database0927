@@ -140,7 +140,7 @@ function toPromptManagerShow() {
           .then(function (answer) {
             if (answer.showManagers) {
                 displayManagers();
-                startApp();
+               
           } else {
             console.log('Okay, not showing managers...');
             showManagers = false;
@@ -155,13 +155,15 @@ function toPromptManagerShow() {
     
 function displayManagers() {
   connection.query(
-    'SELECT e.first_name, e.last_name, e.role_id, e.manager_id, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
+    'SELECT e.first_name, e.last_name, CONCAT(m.first_name, " ", m.last_name) AS manager_name FROM employee e LEFT JOIN employee m ON e.manager_id = m.id',
     (err, results) => {
       if (err) {
         console.error('Error:', err);
       } else {
+        
         console.table(results);
         startApp();
+        
       }
     }
   );
@@ -263,7 +265,7 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
   ])
   . then((answers) => {
     let role_id = null;
-    let manager_id = null;
+   
    
 
       switch (answers.role) {
@@ -286,8 +288,11 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
             default:
               break;
       }
-
+      let manager_id = null;
               switch (answers.employee_manager) {
+                case 'None':
+                  manager_id = null;
+                  break;
                 case 'John Linen':
                     manager_id = 1; 
                     break;
@@ -313,10 +318,10 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
                     break;
             }
       
-              if (answers.employee_manager === 'None') { //if no manager, fiel will be null
+              // if (answers.employee_manager === 'None') { //if no manager, fiel will be null
                 
-                manager_id = answers.employee_manager; // name of manager will use the case corresponded to it in switch function and set the manager id 
-              }
+              //   manager_id = answers.employee_manager; // name of manager will use the case corresponded to it in switch function and set the manager id 
+              // }
       
     connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, role_id, manager_id],
      (err,results) => {
