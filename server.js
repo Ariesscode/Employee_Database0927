@@ -345,7 +345,7 @@ function updateEmployeeRole() {
   inquirer.prompt
   ([
     {
-      type: 'input',
+      type: 'list',
       name: 'update_employee',
       message: 'Which employees role do you want to update?',
       choices: [
@@ -353,25 +353,46 @@ function updateEmployeeRole() {
         'Abby Smith',
         'Bryan Sanchez', 
         'Bob Brown', 
-        'Maxie Luiz', 
+        'Maxie luiz', 
         'Chris Jr'
 
       ]
     },
     {
-      type: 'input',
+      type: 'list',
       name: 'new_role',
-      message: 'Enter the new role for the employee:',
-      validate: (input) => {
-        if (input === '') {
+      message: 'Which role would you like to assign to the updated employee?',
+      choices: [
+        'HR manager',
+        'Accountant',
+        'Software Engineer',
+        'Janitor',
+        'Real Estate Agent'
+
+      ],
+      validate: (choice) => {
+        if (choice === '') {
           return 'Role name is required to update the employee role.';
         }
         return true;
       },
     },
   ]).then((answers) => {
-    const employeeName = answers.employee_name;
+    const employeeName = answers.update_employee;
     const newRole = answers.new_role;
+
+    connection.query('SELECT id FROM role WHERE title = ?', [newRole], (err, roleResults) => {
+      if (err) {
+        console.error('Error:', err);
+        return;
+      }
+
+      if (roleResults.length === 0) {
+        console.log('Role not found.');
+        startApp();
+        return;
+      }
+   
   
 
     connection.query('SELECT id FROM employee WHERE first_name = ?', [employeeName], (err, results) => {
@@ -389,7 +410,7 @@ function updateEmployeeRole() {
       const employeeId = results[0].id; //extracting the id from the results, expecting one name 
 
       
-      connection.query('UPDATE employee SET role_id = (SELECT id FROM role WHERE title = ?) WHERE id = ?', [newRole, employeeId], 
+      connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [newRole, employeeId], 
       (err, results) => { //update employee by id using the new role name, id which was extracted from the query of first name 
         if (updateErr) {
           console.error('Error:', err);  
@@ -397,7 +418,7 @@ function updateEmployeeRole() {
           console.table(results);
           startApp();
         }
-        
+      })
       });
     });
   });
