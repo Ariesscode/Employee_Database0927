@@ -359,17 +359,9 @@ function updateEmployeeRole() {
       ]
     },
     {
-      type: 'list',
+      type: 'input',
       name: 'new_role',
-      message: 'Which role would you like to assign to the updated employee?',
-      choices: [
-        'HR manager',
-        'Accountant',
-        'Software Engineer',
-        'Janitor',
-        'Real Estate Agent'
-
-      ],
+      message: 'Enter role id you would like to assign to employee.',
       validate: (choice) => {
         if (choice === '') {
           return 'Role name is required to update the employee role.';
@@ -379,9 +371,10 @@ function updateEmployeeRole() {
     },
   ]).then((answers) => {
     const employeeName = answers.update_employee;
-    const newRole = answers.new_role;
+    const newRoleId = answers.new_role_id;
 
-    connection.query('SELECT id FROM role WHERE title = ?', [newRole], (err, roleResults) => {
+    connection.query('SELECT CONCAT(first_name, " ", last_name) AS full_name FROM employee'
+    , [employeeName], (err, roleResults) => {
       if (err) {
         console.error('Error:', err);
         return;
@@ -394,36 +387,28 @@ function updateEmployeeRole() {
       }
    
   
-
-    connection.query('SELECT id FROM employee WHERE first_name = ?', [employeeName], (err, results) => {
-      if (err) {
-        console.error('Error:', err);
-        return;
-      }
-
-      if (results.length === 0) {
-        console.log('Employee not found.');
-        startApp();
-        return;
-      }
+      const employeeId = roleResults[0].id;
+    
   
-      const employeeId = results[0].id; //extracting the id from the results, expecting one name 
-
-      
-      connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [newRole, employeeId], 
-      (err, results) => { //update employee by id using the new role name, id which was extracted from the query of first name 
-        if (updateErr) {
-          console.error('Error:', err);  
-        } else {
+      connection.query(
+        'UPDATE employee SET role_id = ? WHERE id = ?',
+        [newRoleId, employeeId],
+        (err, results) => {
+          if (err) {
+            console.error('Error:', err);
+            return;
+          }
           console.table(results);
           startApp();
         }
-      })
+    
+      )
       });
-    });
-  });
-}
-
+    })
+  
+  }
+    
+  
 
 function addRole() {
   inquirer.prompt
