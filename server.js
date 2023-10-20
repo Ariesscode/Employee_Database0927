@@ -135,7 +135,7 @@ function toPromptManagerShow() {
               name: 'showManagers',
               message: 'Would you like to see the managers added to the table? Enter Yes(Y) or No(N).',
               default: false, //this will prompt user to show managers and if not it will not show the mangers
-            },
+            }
           ])
           .then(function (answer) {
             if (answer.showManagers) {
@@ -145,8 +145,9 @@ function toPromptManagerShow() {
             console.log('Okay, not showing managers...');
             showManagers = false;
             startApp();
+           
           }
-          
+        
         })
         
     }
@@ -164,6 +165,7 @@ function displayManagers() {
         console.table(results);
         startApp();
         
+
       }
     }
   );
@@ -318,10 +320,7 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
                     break;
             }
       
-              // if (answers.employee_manager === 'None') { //if no manager, fiel will be null
-                
-              //   manager_id = answers.employee_manager; // name of manager will use the case corresponded to it in switch function and set the manager id 
-              // }
+            
       
     connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, role_id, manager_id],
      (err,results) => {
@@ -331,12 +330,10 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
    
      console.log('Employee added successfully!')
       console.table(results)
-      allEmployees();
       startApp();
-
+      
     }
-  
-   
+
   })
 })
 }
@@ -380,7 +377,6 @@ function updateEmployeeRole() {
     connection.query('SELECT id FROM employee WHERE first_name = ?', [employeeName], (err, results) => {
       if (err) {
         console.error('Error:', err);
-        startApp();
         return;
       }
 
@@ -475,7 +471,7 @@ function addRole() {
      (err, results) => {
       if (err) {
         console.error('Error:', err);
-        startApp();
+       
         return;
       }
     
