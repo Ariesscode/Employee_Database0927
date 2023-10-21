@@ -14,7 +14,7 @@ https://drive.google.com/file/d/1gz9pXngV1vyMTgra6GDtN6OhlpvBA0M3/view
 
 Inquirer  `npm i inquirer@8.2.4`
 
-## Get started 
+## Get started (Database is all ready set if you want to skip MYSQL tutorial, npm start!)
 - Download/ Install all dependencies (npm i)
 - Log into MYSQL (mysql -u root -p) 
 - Enter password for MYSQL
@@ -63,3 +63,9 @@ The following video shows an example of the application being used from the comm
 [![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
 
 ![Database schema includes tables labeled “employee,” role,” and “department.”](./Assets/12-sql-homework-demo-01.png)
+
+
+![Alt text](screenshots/screenshot_data2.png)
+
+![Alt text](screenshots/screenshotdata_3.png)
+
