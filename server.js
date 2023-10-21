@@ -25,7 +25,7 @@ const connection = mysql.createConnection(
     
 )
 
-const choices = [
+let choices = [
         'John Linen', 
         'Abby Smith',
         'Bryan Sanchez', 
@@ -34,7 +34,7 @@ const choices = [
         'Chris Jr'
 ];
 
-const managerChoices = [
+let managerChoices = [
         'None',
         'John Linen', 
         'Abby Smith',
@@ -46,13 +46,7 @@ const managerChoices = [
 
 ]
 
-const departmentChoices = [
-        'HR',
-        'Finance',
-        'Engineering',
-        'Custodian',
-        'Realtor'
-];
+
 
 
 
@@ -420,7 +414,7 @@ function updateEmployeeRole() {
     
   
 
- const roleChoices = [
+ let roleChoices = [
     'HR manager', 
     'Accountant',
     'Software Engineer', 
@@ -429,6 +423,14 @@ function updateEmployeeRole() {
     'Exit'
   ]
 
+
+  const departmentChoices = [
+    'HR',
+    'Finance',
+    'Engineering',
+    'Custodian',
+    'Realtor'
+];
 
 function addRole() {
   inquirer.prompt
@@ -465,45 +467,17 @@ function addRole() {
   ])
   .then((answers) => {
     let newRoleChoice = answers.add_role;
-    let department_id = null;  // switch statement used to add the dpeartment id corresponded to the role
-    switch (answers.role_department) {
-      case 'HR':
-          department_id = 1; 
-          break;
-          case 'Finance':
-          department_id = 2; 
-          break;
-          case 'Engineering':
-          department_id = 3; 
-          break;
-          case 'Custodian':
-          department_id = 4; 
-          break;
-          case 'Realtor':
-          department_id = 5; 
-          break;
-          
-        default:
-          break;
-  }
-
-    connection.query('SELECT * FROM role WHERE title = ?', [answers.add_role],
-  
-     (err, results) => {
-      if (err) {
-        console.error('Error:', err);
-       
-        return;
-      }
-    
-      if (results.length > 0) {
-        console.log('Role already exists.');
-        startApp();
-      } else {
-      
+      const departmentName = answers.role_department;
+      connection.query('SELECT id FROM department WHERE department = ?', [departmentName], (err, results) => {
+        if (err) {
+          console.error('Error:', err);
+          return;
+        }
+        if (results.length > 0) {
+          const departmentId = results[0].id; 
         connection.query(
           'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)',
-          [answers.add_role, answers.role_salary, department_id],
+          [answers.add_role, answers.role_salary, departmentId],
           (err, results) => {
             if (err) {
               console.error('Error:', err);
@@ -516,9 +490,12 @@ function addRole() {
         
           }
           );
+  
+        
         }
       });
     });
+  
   }
   
 
