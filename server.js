@@ -432,6 +432,7 @@ function updateEmployeeRole() {
     'Realtor'
 ];
 
+
 function addRole() {
   inquirer.prompt
   ([
