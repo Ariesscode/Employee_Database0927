@@ -34,6 +34,14 @@ choices = [
         'Chris Jr'
 ]
 
+departmentChoices = [
+        'HR',
+        'Finance',
+        'Engineering',
+        'Custodian',
+        'Realtor'
+]
+
 function startApp() {
 inquirer.prompt
 ([
@@ -440,13 +448,7 @@ function addRole() {
       type: 'list',
       name: 'role_department',
       message: 'Which department does this role belong to?',
-      choices: [
-        'HR',
-        'Finance',
-        'Engineering',
-        'Custodian',
-        'Realtor'
-      ]
+      choices: departmentChoices,
 
     }
   ])
@@ -524,7 +526,7 @@ function addDepartment() {
     }
   
    ]).then((answers) => {
-
+    let newDepartment = answers.add_department
       connection.query('SELECT * FROM department', (selectErr, selectResults) => {
         if (selectErr) {
           console.error('Error:', selectErr);
@@ -548,6 +550,8 @@ function addDepartment() {
               console.error('Error:', insertErr);
             } else {
               console.log('Department added successfully!');
+              departmentChoices.push(newDepartment)
+
               console.table(insertResults);
               startApp();
             }
