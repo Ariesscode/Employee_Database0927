@@ -371,9 +371,9 @@ function updateEmployeeRole() {
     },
   ]).then((answers) => {
     const employeeName = answers.update_employee;
-    const newRoleId = answers.new_role_id;
+    const newRoleId = answers.new_role;
 
-    connection.query('SELECT CONCAT(first_name, " ", last_name) AS full_name FROM employee'
+    connection.query('SELECT id FROM employee WHERE CONCAT(first_name, " ", last_name) = ?'
     , [employeeName], (err, roleResults) => {
       if (err) {
         console.error('Error:', err);
