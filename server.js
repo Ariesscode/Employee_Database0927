@@ -25,6 +25,14 @@ const connection = mysql.createConnection(
     
 )
 
+choices = [
+        'John Linen', 
+        'Abby Smith',
+        'Bryan Sanchez', 
+        'Bob Brown', 
+        'Maxie Luiz', 
+        'Chris Jr'
+]
 
 function startApp() {
 inquirer.prompt
@@ -319,8 +327,8 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
                 default:
                     break;
             }
-      
-            
+
+            const fullName = answers.first_name + ' ' + answers.last_name;
       
     connection.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)`, [answers.first_name, answers.last_name, role_id, manager_id],
      (err,results) => {
@@ -329,6 +337,7 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
     } else {
    
      console.log('Employee added successfully!')
+     choices.push(fullName)
       console.table(results)
       startApp();
       
@@ -348,15 +357,7 @@ function updateEmployeeRole() {
       type: 'list',
       name: 'update_employee',
       message: 'Which employees role do you want to update?',
-      choices: [
-        'John Linen', 
-        'Abby Smith',
-        'Bryan Sanchez', 
-        'Bob Brown', 
-        'Maxie luiz', 
-        'Chris Jr'
-
-      ]
+      choices: choices,
     },
     {
       type: 'input',
