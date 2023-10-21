@@ -25,22 +25,37 @@ const connection = mysql.createConnection(
     
 )
 
-choices = [
+const choices = [
         'John Linen', 
         'Abby Smith',
         'Bryan Sanchez', 
         'Bob Brown', 
         'Maxie Luiz', 
         'Chris Jr'
+];
+
+const managerChoices = [
+        'None',
+        'John Linen', 
+        'Abby Smith',
+        'Bryan Sanchez', 
+        'Bob Brown', 
+        'Maxie Luiz', 
+        'Chris Jr', 
+        'Exit'
+
 ]
 
-departmentChoices = [
+const departmentChoices = [
         'HR',
         'Finance',
         'Engineering',
         'Custodian',
         'Realtor'
-]
+];
+
+
+
 
 function startApp() {
 inquirer.prompt
@@ -187,6 +202,7 @@ function displayManagers() {
   );
 }
 
+
 function viewAllRoles() {
     connection.query(
         'SELECT r.id, r.title, r.salary, d.department FROM role r JOIN department d ON r.department_id = d.id', (err, results) => {
@@ -244,15 +260,8 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
           type: 'list',
           name: 'role',
           message: 'What is their role?',
-          choices: [
-            'HR manager', 
-            'Accountant',
-            'Software Engineer', 
-            'Janitor', 
-            'Real Estate Agent', 
-            'Exit'
-        ],
-        validate: (choices) => {
+          choices: roleChoices,
+          validate: (choices) => {
             if(choices === "") {
                 return 'Choose one of the options to add an employee.'
             }
@@ -263,16 +272,7 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
       type: 'list',
       name: 'employee_manager',
       message: 'Who is the employees manager?',
-      choices: [
-        'None',
-        'John Linen', 
-        'Abby Smith',
-        'Bryan Sanchez', 
-        'Bob Brown', 
-        'Maxie Luiz', 
-        'Chris Jr', 
-        'Exit'
-    ],
+      choices: managerChoices,
     validate: (choices) => {
         if(choices === "") {
             return 'If employee does not have a manger, choose none from lsit.'
@@ -346,6 +346,7 @@ function addEmployee() { //prompts question to fill in all seeds of employee tab
    
      console.log('Employee added successfully!')
      choices.push(fullName)
+     managerChoices.push(fullName)
       console.table(results)
       startApp();
       
@@ -419,6 +420,16 @@ function updateEmployeeRole() {
     
   
 
+ const roleChoices = [
+    'HR manager', 
+    'Accountant',
+    'Software Engineer', 
+    'Janitor', 
+    'Real Estate Agent', 
+    'Exit'
+  ]
+
+
 function addRole() {
   inquirer.prompt
   ([
@@ -453,6 +464,7 @@ function addRole() {
     }
   ])
   .then((answers) => {
+    let newRoleChoice = answers.add_role;
     let department_id = null;  // switch statement used to add the dpeartment id corresponded to the role
     switch (answers.role_department) {
       case 'HR':
@@ -497,6 +509,7 @@ function addRole() {
               console.error('Error:', err);
             } else {
               console.log('Role added successfully!');
+              roleChoices.push(newRoleChoice);
               console.table(results);
               startApp();
             }
